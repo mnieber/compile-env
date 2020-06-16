@@ -1,19 +1,18 @@
 from setuptools import find_packages, setup
 
 setup(name='docker_compose_env',
-      version='0.1.2',
+      version='0.1.3',
       description=
       'Solve the problem that environment variables are not interpolated by docker-compose',
       url='https://github.com/mnieber/docker_compose_env',
-      download_url='https://github.com/mnieber/docker_compose_env/tarball/0.1.2',
+      download_url='https://github.com/mnieber/docker_compose_env/tarball/0.1.3',
       author='Maarten Nieber',
       author_email='hallomaarten@yahoo.com',
       license='MIT',
       packages=find_packages(),
       package_data={
           'docker_compose_env': [
-              'bin/*.sh',
-              'bin/*.fish',
+              'bin/*',
           ]
       },
       entry_points={'console_scripts': [
