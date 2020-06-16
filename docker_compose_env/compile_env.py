@@ -1,7 +1,8 @@
 import argparse
-import yaml
-import re
 import os
+import re
+
+import yaml
 
 
 def compile(env_line):
@@ -30,18 +31,22 @@ def compile_files(input_files):
     return content
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("spec_file")
-
-    args = parser.parse_args()
-    with open(args.spec_file) as f:
+def run(spec_file):
+    with open(spec_file) as f:
         spec = yaml.load(f, Loader=yaml.FullLoader)
 
     for output_filename, input_files in spec.items():
         content = compile_files(input_files)
         with open(output_filename, 'w') as f:
             f.write(content)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("spec_file")
+
+    args = parser.parse_args()
+    run(args.spec_file)
 
 
 if __name__ == "__main__":

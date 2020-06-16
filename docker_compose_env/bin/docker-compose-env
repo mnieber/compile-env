@@ -1,3 +1,0 @@
-#!/bin/sh
-compile-env $1 || exit 1
-docker-compose "${@:2}"
