@@ -22,6 +22,7 @@ def compile(env_line):
 
 def compile_files(input_files):
     content = ""
+
     for input_file in input_files:
         with open(input_file) as f:
             for env_line in f.readlines():
@@ -35,15 +36,15 @@ def run(spec_file):
     with open(spec_file) as f:
         spec = yaml.load(f, Loader=yaml.FullLoader)
 
-    memo = dict(os.environ)
-    try:
         for output_filename, input_files in spec.items():
-            content = compile_files(input_files)
+            memo = dict(os.environ)
+            try:
+                content = compile_files(input_files)
+            finally:
+                os.environ.clear()
+                os.environ.update(memo)
             with open(output_filename, 'w') as f:
                 f.write(content)
-    finally:
-        os.environ.clear()
-        os.environ.update(memo)
 
 
 def main():
