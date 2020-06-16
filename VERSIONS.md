@@ -1,5 +1,9 @@
 # Version history
 
+## 0.1.5
+
+- Fix: restore os.environ to its previous value
+
 ## 0.1.4
 
 - Add docker-compose-env entry point
