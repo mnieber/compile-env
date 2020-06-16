@@ -35,10 +35,15 @@ def run(spec_file):
     with open(spec_file) as f:
         spec = yaml.load(f, Loader=yaml.FullLoader)
 
-    for output_filename, input_files in spec.items():
-        content = compile_files(input_files)
-        with open(output_filename, 'w') as f:
-            f.write(content)
+    memo = dict(os.environ)
+    try:
+        for output_filename, input_files in spec.items():
+            content = compile_files(input_files)
+            with open(output_filename, 'w') as f:
+                f.write(content)
+    finally:
+        os.environ.clear()
+        os.environ.update(memo)
 
 
 def main():
