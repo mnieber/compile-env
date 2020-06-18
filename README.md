@@ -15,12 +15,17 @@ It follows these steps:
 
 The spec file is a yaml file that contains a dictionary that maps an <output_filename> to a list of <input_filename>, e.g.
 
-one.env:
-  - foo.env
-  - bar.env
+```
+        # my-env-spec.yaml
 
-two.env:
-  - foo.env
-  - hello.env
-  - baz.env
+        one.env:
+        - foo.env
+        - bar.env
 
+        two.env:
+        - foo.env
+        - hello.env
+        - baz.env
+```
+
+When you run `docker-compose-env my-env-spec.yaml up` then it will read `foo.env` and `bar.env` to produce `one.env`, and it will read `foo.env`, `hello.env` and `baz.env` to produce `two.env`, using interpolation. The docker-compose file can then refer to `one.env` and `two.env` in the `env_file` section.
