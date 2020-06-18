@@ -28,4 +28,10 @@ The spec file is a yaml file that contains a dictionary that maps an <output_fil
         - baz.env
 ```
 
+## Running docker-compose-env
+
 When you run `docker-compose-env my-env-spec.yaml up` then it will read `foo.env` and `bar.env` to produce `one.env`, and it will read `foo.env`, `hello.env` and `baz.env` to produce `two.env`, using interpolation. The docker-compose file can then refer to `one.env` and `two.env` in the `env_file` section.
+
+## Running compile-env
+
+It's also possible to run only the .env file compilation step using `compile-env my-env-spec.yaml`.
