@@ -1,11 +1,11 @@
 from setuptools import find_packages, setup
 
 setup(name='docker_compose_env',
-      version='0.1.7',
+      version='0.1.8',
       description=
       'Solve the problem that environment variables are not interpolated by docker-compose',
       url='https://github.com/mnieber/docker_compose_env',
-      download_url='https://github.com/mnieber/docker_compose_env/tarball/0.1.7',
+      download_url='https://github.com/mnieber/docker_compose_env/tarball/0.1.8',
       author='Maarten Nieber',
       author_email='hallomaarten@yahoo.com',
       license='MIT',

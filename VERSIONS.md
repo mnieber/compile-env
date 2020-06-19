@@ -1,5 +1,9 @@
 # Version history
 
+## 0.1.8
+
+- Use required_variables
+
 ## 0.1.7
 
 - Use a dependencies list and an includes list
