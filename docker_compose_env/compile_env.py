@@ -1,6 +1,7 @@
 import argparse
 import os
 import re
+import sys
 
 import yaml
 
@@ -52,6 +53,9 @@ def main():
     parser.add_argument("spec_file")
 
     args = parser.parse_args()
+    if not os.path.exists(args.spec_file):
+        print("Spec file not found: %s" % args.spec_file)
+        sys.exit(1)
     run(args.spec_file)
 
 
