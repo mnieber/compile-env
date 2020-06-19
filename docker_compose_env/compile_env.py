@@ -4,6 +4,7 @@ import re
 import sys
 
 import yaml
+from expandvars import expandvars
 
 
 def compile(env_line):
@@ -14,18 +15,18 @@ def compile(env_line):
         groups = matches[0].groups()
         prefix = groups[0] or ""
         key = groups[1]
-        value = os.path.expandvars(groups[2])
+        value = expandvars(groups[2])
         os.environ[key] = value
         return f"{prefix}{key}={value}"
 
     return None
 
 
-def compile_files(input_files):
+def compile_files(root_dir, input_files):
     content = ""
 
     for input_file in input_files:
-        with open(input_file) as f:
+        with open(os.path.join(root_dir, input_file)) as f:
             for env_line in f.readlines():
                 output_line = compile(env_line.strip())
                 if output_line:
@@ -34,13 +35,17 @@ def compile_files(input_files):
 
 
 def run(spec_file):
-    with open(spec_file) as f:
-        spec = yaml.load(f, Loader=yaml.FullLoader)
+    root_dir = os.path.dirname(spec_file)
 
-        for output_filename, input_files in spec.items():
+    with open(spec_file) as f:
+        global_spec = yaml.load(f, Loader=yaml.FullLoader)
+
+        for output_filename, spec in global_spec["outputs"].items():
             memo = dict(os.environ)
+            compile_files(root_dir, global_spec.get("global_dependencies", []))
+            compile_files(root_dir, spec.get("dependencies", []))
             try:
-                content = compile_files(input_files)
+                content = compile_files(root_dir, spec["includes"])
             finally:
                 os.environ.clear()
                 os.environ.update(memo)
