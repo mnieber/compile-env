@@ -1,5 +1,4 @@
 import argparse
-import os
 import subprocess
 import sys
 
@@ -12,10 +11,11 @@ def main():
     parser.add_argument("docker_compose_args", nargs="*")
 
     args = parser.parse_args()
-    if not os.path.exists(args.spec_file):
-        print("Spec file not found: %s" % args.spec_file)
+    try:
+        compile_env.run(args.spec_file)
+    except compile_env.RunTimeError as e:
+        print("Error: %s" % e.reason)
         sys.exit(1)
-    compile_env.run(args.spec_file)
 
     subprocess.run(
         ["docker-compose %s" % " ".join(args.docker_compose_args)], shell=True

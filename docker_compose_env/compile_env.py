@@ -7,6 +7,11 @@ import yaml
 from expandvars import expandvars
 
 
+class RunTimeError(Exception):
+    def __init__(self, reason):
+        self.reason = reason
+
+
 def compile(env_line):
     regex = r"(export\s*)?([^=]+)=([^=]+)\s*"
     matches = list(re.finditer(regex, env_line))
@@ -34,11 +39,23 @@ def compile_files(root_dir, input_files):
     return content
 
 
+def require_variables(variables):
+    for variable in variables:
+        if variable not in os.environ:
+            raise RunTimeError(
+                "Required variable %s is not in the environment" % variable
+            )
+
+
 def run(spec_file):
+    if not os.path.exists(spec_file):
+        raise RunTimeError("Spec file not found: %s" % spec_file)
+
     root_dir = os.path.dirname(spec_file)
 
     with open(spec_file) as f:
         global_spec = yaml.load(f, Loader=yaml.FullLoader)
+        require_variables(global_spec.get("required_variables", []))
 
         for output_filename, spec in global_spec["outputs"].items():
             memo = dict(os.environ)
@@ -58,10 +75,11 @@ def main():
     parser.add_argument("spec_file")
 
     args = parser.parse_args()
-    if not os.path.exists(args.spec_file):
-        print("Spec file not found: %s" % args.spec_file)
+    try:
+        run(args.spec_file)
+    except RunTimeError as e:
+        print("Error: %s" % e.reason)
         sys.exit(1)
-    run(args.spec_file)
 
 
 if __name__ == "__main__":

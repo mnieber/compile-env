@@ -22,6 +22,9 @@ The list of includes contains .env files that should be interpolated and merged 
         global_dependencies:
           - secrets.env
 
+        required_variables:
+          - BUILD_ID
+
         outputs:
           one.env:
             dependencies:
@@ -43,6 +46,15 @@ Note that `one.env` and `two.env` are created independently (reading the variabl
 ## Variable interpolation
 
 The interpolation depends on the [expandvars](https://pypi.org/project/expandvars/) package.
+
+## The export keyword
+
+If a line in a .env file starts with 'export' then this keyword is ignored. In this case,
+the corresponding line in the output .env file will also start with 'export'.
+
+## Undefined variables
+
+Undefined variables will be interpolated to an empty string. You can add variables to the `require_variables` list to guard against cases where the caller forgot to define a variable.
 
 ## Running compile-env
 
