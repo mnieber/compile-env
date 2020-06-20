@@ -27,11 +27,11 @@ def compile(env_line):
     return None
 
 
-def compile_files(root_dir, input_files):
+def compile_files(root_dir, target_files):
     content = ""
 
-    for input_file in input_files:
-        with open(os.path.join(root_dir, input_file)) as f:
+    for target_file in target_files:
+        with open(os.path.join(root_dir, target_file)) as f:
             for env_line in f.readlines():
                 output_line = compile(env_line.strip())
                 if output_line:
@@ -62,7 +62,7 @@ def run(spec_file):
             compile_files(root_dir, global_spec.get("global_dependencies", []))
             compile_files(root_dir, spec.get("dependencies", []))
             try:
-                content = compile_files(root_dir, spec["includes"])
+                content = compile_files(root_dir, spec["targets"])
             finally:
                 os.environ.clear()
                 os.environ.update(memo)

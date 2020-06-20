@@ -13,8 +13,8 @@ It follows these steps:
 
 ## Specification file format
 
-The spec file is a yaml file that contains a dictionary that maps an <output_filename> to a list of dependencies and a list of includes. The list of dependencies contains .env files that should be read but not added to the output file.
-The list of includes contains .env files that should be interpolated and merged into the output file. For example:
+The spec file is a yaml file that contains a dictionary that maps an <output_filename> to a list of dependencies and a list of targets. The list of dependencies contains .env files that should be read but not added to the output file.
+The list of targets contains .env files that should be interpolated and merged into the output file. For example:
 
 ```
         # my-env-spec.yaml
@@ -29,18 +29,18 @@ The list of includes contains .env files that should be interpolated and merged 
           one.env:
             dependencies:
               - foo.env
-            includes:
+            targets:
               - bar.env
               - baz.env
 
           two.env:
-            includes:
+            targets:
               - bar.env
 ```
 
 ## Running docker-compose-env
 
-When you run `docker-compose-env my-env-spec.yaml up` then it will temporarily add the  variables in `secrets.env` (the global dependency) and `foo.env` (the dependency of `one.env`) to the environment and use them to interpolate the variables in `bar.env` and `baz.env` (the includes for `one.env`). The result of that interpolation is written as a new .env file to `one.env`. The processing of `two.env` is similar. The docker-compose file can then refer to `one.env` and `two.env` in its `env_file` section.
+When you run `docker-compose-env my-env-spec.yaml up` then it will temporarily add the  variables in `secrets.env` (the global dependency) and `foo.env` (the dependency of `one.env`) to the environment and use them to interpolate the variables in `bar.env` and `baz.env` (the targets for `one.env`). The result of that interpolation is written as a new .env file to `one.env`. The processing of `two.env` is similar. The docker-compose file can then refer to `one.env` and `two.env` in its `env_file` section.
 Note that `one.env` and `two.env` are created independently (reading the variables to create `one.env` does not affect the creation of `two.env`).
 
 ## Variable interpolation
