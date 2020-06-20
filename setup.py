@@ -15,5 +15,5 @@ setup(name='docker_compose_env',
           'docker-compose-env=docker_compose_env.__init__:main',
       ]},
       data_files=[],
-      install_requires=["wheel", "PyYAML", "expandvars", "six"],
+      install_requires=["PyYAML", "expandvars", "six"],
       zip_safe=False)
