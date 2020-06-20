@@ -1,5 +1,9 @@
 # Version history
 
+## 0.1.9
+
+- Add wheel to setup_requires
+
 ## 0.1.8
 
 - Use required_variables

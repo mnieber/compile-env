@@ -5,6 +5,7 @@ import sys
 
 import yaml
 from expandvars import expandvars
+from six import StringIO
 
 
 class RunTimeError(Exception):
@@ -54,7 +55,8 @@ def run(spec_file):
     root_dir = os.path.dirname(spec_file)
 
     with open(spec_file) as f:
-        global_spec = yaml.load(f, Loader=yaml.FullLoader)
+        spec_file_str = expandvars(f.read())
+        global_spec = yaml.load(StringIO(spec_file_str), Loader=yaml.FullLoader)
         require_variables(global_spec.get("required_variables", []))
 
         for output_filename, spec in global_spec["outputs"].items():
