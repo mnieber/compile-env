@@ -23,7 +23,7 @@ def compile(env_line):
         key = groups[1]
         value = expandvars(groups[2])
         os.environ[key] = value
-        return "%s%s=%s" % (prefix, key. value)
+        return "%s%s=%s" % (prefix, key, value)
 
     return None
 
