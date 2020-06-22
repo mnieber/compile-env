@@ -1,5 +1,9 @@
 # Version history
 
+## 0.1.12
+
+- Handle multiline vars
+
 ## 0.1.9
 
 - Add wheel to setup_requires
