@@ -1,10 +1,6 @@
 # Version history
 
-## 0.1.13
-
-- Add option --write-single-lines
-
-## 0.1.12
+## 0.1.14
 
 - Handle multiline vars
 
