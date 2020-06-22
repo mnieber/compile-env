@@ -12,7 +12,7 @@ def main():
 
     args = parser.parse_args()
     try:
-        compile_env.run(args.spec_file, write_single_lines=True)
+        compile_env.run(args.spec_file)
     except compile_env.RunTimeError as e:
         print("Error: %s" % e.reason)
         sys.exit(1)
