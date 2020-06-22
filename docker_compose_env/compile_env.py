@@ -53,12 +53,14 @@ def get_lines(f):
     yield line
 
 
-def compile_files(root_dir, target_files):
+def compile_files(root_dir, target_files, use_single_lines):
     content = ""
 
     for target_file in target_files:
         with open(os.path.join(root_dir, target_file)) as f:
             for env_line in get_lines(f):
+                if use_single_lines:
+                    env_line = env_line.replace(os.linesep, '')
                 output_line = compile(env_line.strip())
                 if output_line:
                     content += output_line + os.linesep
@@ -73,7 +75,7 @@ def require_variables(variables):
             )
 
 
-def run(spec_file):
+def run(spec_file, use_single_lines):
     if not os.path.exists(spec_file):
         raise RunTimeError("Spec file not found: %s" % spec_file)
 
@@ -86,10 +88,10 @@ def run(spec_file):
 
         for output_filename, spec in global_spec["outputs"].items():
             memo = dict(os.environ)
-            compile_files(root_dir, global_spec.get("global_dependencies", []))
-            compile_files(root_dir, spec.get("dependencies", []))
+            compile_files(root_dir, global_spec.get("global_dependencies", []), use_single_lines)
+            compile_files(root_dir, spec.get("dependencies", []), use_single_lines)
             try:
-                content = compile_files(root_dir, spec["targets"])
+                content = compile_files(root_dir, spec["targets"], use_single_lines)
             finally:
                 os.environ.clear()
                 os.environ.update(memo)
@@ -100,10 +102,11 @@ def run(spec_file):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("spec_file")
+    parser.add_argument("--use-single-lines", action="store_true")
 
     args = parser.parse_args()
     try:
-        run(args.spec_file)
+        run(args.spec_file, args.use_single_lines)
     except RunTimeError as e:
         print("Error: %s" % e.reason)
         sys.exit(1)
