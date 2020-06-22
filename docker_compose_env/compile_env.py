@@ -14,8 +14,8 @@ class RunTimeError(Exception):
 
 
 def compile(env_line):
-    regex = r"(export\s*)?([^=]+)=([^=]+)\s*"
-    matches = list(re.finditer(regex, env_line))
+    regex = r"(export\s*)?([^=]+)=(.*)"
+    matches = list(re.finditer(regex, env_line, re.DOTALL))
 
     if len(matches) == 1:
         groups = matches[0].groups()
@@ -28,12 +28,37 @@ def compile(env_line):
     return None
 
 
+def get_lines(f):
+    quote = None
+    escape = False
+    line = ""
+
+    for char in f.read():
+        line += char
+
+        if char == os.linesep:
+            if quote:
+                continue
+            yield line
+            line, quote, escape = "", None, False
+        elif quote and escape:
+            escape = False
+        elif quote and char == "\\":
+            escape = True
+        elif char == "'" or char == '"':
+            if quote and quote == char:
+                quote = None
+            elif not quote:
+                quote = char
+    yield line
+
+
 def compile_files(root_dir, target_files):
     content = ""
 
     for target_file in target_files:
         with open(os.path.join(root_dir, target_file)) as f:
-            for env_line in f.readlines():
+            for env_line in get_lines(f):
                 output_line = compile(env_line.strip())
                 if output_line:
                     content += output_line + os.linesep
