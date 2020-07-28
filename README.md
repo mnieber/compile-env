@@ -19,6 +19,10 @@ The list of targets contains .env files that should be interpolated and merged i
 ```
         # my-env-spec.yaml
 
+        settings:
+          # toggle strict checking of unbound variables
+          is_strict: True
+
         global_dependencies:
           - secrets.env
 

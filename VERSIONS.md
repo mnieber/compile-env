@@ -1,5 +1,9 @@
 # Version history
 
+## 0.2.0
+
+- Add strict checking of unbound variables
+
 ## 0.1.14
 
 - Handle multiline vars
