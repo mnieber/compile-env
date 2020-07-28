@@ -3,6 +3,7 @@ import subprocess
 import sys
 
 from docker_compose_env import compile_env
+from expandvars import UnboundVariable
 
 
 def main():
@@ -13,6 +14,9 @@ def main():
     args = parser.parse_args()
     try:
         compile_env.run(args.spec_file)
+    except UnboundVariable as e:
+        print("Error: %s" % e)
+        sys.exit(1)
     except compile_env.RunTimeError as e:
         print("Error: %s" % e.reason)
         sys.exit(1)
