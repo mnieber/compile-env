@@ -1,11 +1,10 @@
-# docker-compose-env
+# compile-env
 
-Solve the problem that environment variables are not interpolated by docker-compose
 
 ## Introduction
 
-The docker-compose-env tool solves the problem that environment variables are not interpolated by docker-compose.
-It follows these steps:
+This tool transforms a set of source .env files into a set of target files. Variable interpolation is
+performed during this step. It follows these steps:
 
 1. read a spec file that lists a number of .env files
 2. read every variable declaration in every .env file (in order)
@@ -42,9 +41,9 @@ The list of targets contains .env files that should be interpolated and merged i
               - bar.env
 ```
 
-## Running docker-compose-env
+## Running compile-env on the above example
 
-When you run `docker-compose-env my-env-spec.yaml up` then it will temporarily add the  variables in `secrets.env` (the global dependency) and `foo.env` (the dependency of `one.env`) to the environment and use them to interpolate the variables in `bar.env` and `baz.env` (the targets for `one.env`). The result of that interpolation is written as a new .env file to `one.env`. The processing of `two.env` is similar. The docker-compose file can then refer to `one.env` and `two.env` in its `env_file` section.
+When you run `compile-env my-env-spec.yaml` then it will temporarily add the variables in `secrets.env` (the global dependency) and `foo.env` (the dependency of `one.env`) to the environment and use them to interpolate the variables in `bar.env` and `baz.env` (the targets for `one.env`). The result of that interpolation is written as a new .env file to `one.env`. The processing of `two.env` is similar.
 Note that `one.env` and `two.env` are created independently (reading the variables to create `one.env` does not affect the creation of `two.env`).
 
 ## Variable interpolation
@@ -58,8 +57,5 @@ the corresponding line in the output .env file will also start with 'export'.
 
 ## Undefined variables
 
-Undefined variables will be interpolated to an empty string. You can add variables to the `require_variables` list to guard against cases where the caller forgot to define a variable.
-
-## Running compile-env
-
-It's also possible to run only the .env file compilation step using `compile-env my-env-spec.yaml`.
+Undefined variables will be interpolated to an empty string. You can add variables to the `require_variables` list to guard against cases where the caller forgot to define a variable. In that case, a missing variable
+will result in a runtime error.
