@@ -22,9 +22,7 @@ def compile(env_line, is_strict=True):
         prefix = groups[0] or ""
         key = groups[1]
         value = expandvars(groups[2], nounset=is_strict)
-        # if value does not contain any environment variables
-        if not len(list(re.finditer(regex, value, re.DOTALL))):
-            os.environ[key] = value
+        os.environ[key] = value
         return "%s%s=%s" % (prefix, key, value)
 
     return None
