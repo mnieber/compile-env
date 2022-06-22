@@ -22,7 +22,9 @@ def compile(env_line, is_strict=True):
         prefix = groups[0] or ""
         key = groups[1]
         value = expandvars(groups[2], nounset=is_strict)
-        os.environ[key] = value
+        # if value does not contain any environment variables
+        if not len(list(re.finditer(regex, value, re.DOTALL))):
+            os.environ[key] = value
         return "%s%s=%s" % (prefix, key, value)
 
     return None
@@ -65,6 +67,17 @@ def compile_files(root_dir, target_files, is_strict):
     return content
 
 
+def render_files(root_dir, target_files, is_strict):
+    content = ""
+
+    for target_file in target_files:
+        with open(os.path.join(root_dir, target_file)) as f:
+            for env_line in get_lines(f):
+                output_line = expandvars(env_line, nounset=is_strict)
+                content += output_line
+    return content
+
+
 def require_variables(variables):
     for variable in variables:
         if variable not in os.environ:
@@ -89,14 +102,16 @@ def run(spec_file):
 
         for output_filename, spec in global_spec["outputs"].items():
             memo = dict(os.environ)
-            compile_files(root_dir, global_spec.get("global_dependencies", []), is_strict)
+            compile_files(
+                root_dir, global_spec.get("global_dependencies", []), is_strict
+            )
             compile_files(root_dir, spec.get("dependencies", []), is_strict)
             try:
-                content = compile_files(root_dir, spec["targets"], is_strict)
+                content = render_files(root_dir, spec["targets"], is_strict)
             finally:
                 os.environ.clear()
                 os.environ.update(memo)
-            with open(output_filename, 'w') as f:
+            with open(os.path.join(root_dir, output_filename), "w") as f:
                 f.write(content)
 
 
