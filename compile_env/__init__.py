@@ -23,9 +23,9 @@ def compile(env_line, is_strict=True):
         key = groups[1]
         value = expandvars(groups[2], nounset=is_strict)
         os.environ[key] = value
-        return "%s%s=%s" % (prefix, key, value)
+        return True
 
-    return None
+    return False
 
 
 def get_lines(f):
@@ -54,15 +54,10 @@ def get_lines(f):
 
 
 def compile_files(root_dir, target_files, is_strict):
-    content = ""
-
     for target_file in target_files:
         with open(os.path.join(root_dir, target_file)) as f:
             for env_line in get_lines(f):
-                output_line = compile(env_line.strip(), is_strict)
-                if output_line:
-                    content += output_line + os.linesep
-    return content
+                compile(env_line.strip(), is_strict)
 
 
 def render_files(root_dir, target_files, is_strict):
