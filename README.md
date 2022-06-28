@@ -63,10 +63,13 @@ The list of targets contains .env files that should be interpolated and merged i
 When you run `compile-env my-env-spec.yaml` then it will temporarily add the variables in `secrets.env` (the global dependency) and `foo.env` (the dependency of `one.env`) to the environment and use them to interpolate the variables in `bar.env` and `baz.env` (the targets for `one.env`). The result of that interpolation is written as a new .env file to `one.env`. The processing of `two.env` is similar.
 Note that `one.env` and `two.env` are created independently (reading the variables to create `one.env` does not affect the creation of `two.env`).
 
-## The export keyword
+## The export keyword in the target files is ignored
 
-If a line in a .env file starts with 'export' then this keyword is ignored. In this case,
-the corresponding line in the output .env file will also start with 'export'.
+If a line in a target .env file starts with 'export' then this keyword is ignored.
+
+## Comments in the template are ignored
+
+If a line in the template start with `#` then this line is copied to the output without interpolating any environment variables.
 
 ## Undefined variables
 
