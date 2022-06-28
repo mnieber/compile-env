@@ -66,7 +66,11 @@ def render_files(root_dir, target_files, is_strict):
     for target_file in target_files:
         with open(os.path.join(root_dir, target_file)) as f:
             for env_line in get_lines(f):
-                output_line = expandvars(env_line, nounset=is_strict)
+                output_line = (
+                    env_line
+                    if env_line.strip().startswith("#")
+                    else expandvars(env_line, nounset=is_strict)
+                )
                 content += output_line
     return content
 
