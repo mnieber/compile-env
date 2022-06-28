@@ -19,7 +19,6 @@ def compile(env_line, is_strict=True):
 
     if len(matches) == 1:
         groups = matches[0].groups()
-        prefix = groups[0] or ""
         key = groups[1]
         value = expandvars(groups[2], nounset=is_strict)
         os.environ[key] = value
