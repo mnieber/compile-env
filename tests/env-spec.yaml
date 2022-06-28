@@ -1,0 +1,15 @@
+settings:
+  is_strict: True
+
+global_dependencies:
+  - secrets.env
+  - values.env
+
+outputs:
+  result1.env:
+    targets:
+      - result1.env.in
+  result2.env:
+    targets:
+      - result2a.env.in
+      - result2b.env.in
