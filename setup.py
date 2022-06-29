@@ -2,10 +2,10 @@ from setuptools import find_packages, setup
 
 setup(
     name="compile-env",
-    version="0.4.0",
+    version="0.4.1",
     description="Solve the problem that environment variables are not interpolated by docker-compose",
     url="https://github.com/mnieber/compile-env",
-    download_url="https://github.com/mnieber/compile-env/tarball/0.3.0",
+    download_url="https://github.com/mnieber/compile-env/tarball/0.4.1",
     author="Maarten Nieber",
     author_email="hallomaarten@yahoo.com",
     license="MIT",
