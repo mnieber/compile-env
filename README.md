@@ -74,3 +74,7 @@ If a line in the template start with `#` then this line is copied to the output 
 ## Undefined variables
 
 When is_strict is false, undefined variables will be interpolated to an empty string. You can add variables to the `require_variables` list to guard against cases where the caller forgot to define a variable. In that case, a missing variable will result in a runtime error.
+
+# Test
+
+Creating a PR
