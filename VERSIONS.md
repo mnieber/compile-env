@@ -1,5 +1,9 @@
 # Version history
 
+## 0.2.2
+
+- Added support for pm reminders
+
 ## 0.2.1
 
 - Add strict checking of unbound variables
